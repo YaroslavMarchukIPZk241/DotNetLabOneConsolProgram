@@ -1,0 +1,43 @@
+# 🔹 Visual Studio 
+.vscode/
+*.code-workspace
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# 🔹 Build / Release 
+bin/
+obj/
+*.exe
+*.dll
+*.pdb
+*.log
+*.cache
+
+# Config
+appsettings.json
+appsettings.*.json
+secrets.json
+.env
+
+# BD
+*.mdf
+*.ldf
+*.sqlite
+*.db
+
+# NuGet pacage
+*.nupkg
+packages/
+.nuget/
+
+# system file
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+#  IDE file
+.idea/
