@@ -176,13 +176,13 @@ namespace BankLibrary
 
     public class AutomatedTellerMachine : IBankOperation
     {
-        public IInput Input { get; set; }
+        public IInput Input { get; set; } = new ConsoleInput();
         public string GetInput()
         {
             return Input.Read();
         }
         private ConnectionManager connectionManager;
-        public IOutput? Output { get; set; }
+        public IOutput? Output { get; set; } = new ConsoleOutput();
         public void DisplayMessage(string message)
         {
             Output?.Write(message);
@@ -338,7 +338,7 @@ namespace BankLibrary
 
     public class GetAccount : IAutorization 
     {
-        public IOutput? Output { get; set; }
+        public IOutput? Output { get; set; } = new ConsoleOutput();
         public void DisplayMessage(string message)
         {
             Output?.Write(message);
@@ -383,8 +383,8 @@ namespace BankLibrary
 
     public class Bank 
     {
-        public IOutput? Output { get; set; }
-        public IInput Input { get; set; }
+        public IOutput? Output { get; set; } = new ConsoleOutput();
+        public IInput Input { get; set; } = new ConsoleInput();
         private ConnectionManager connectionManager;
         public string GetInput()
         {
