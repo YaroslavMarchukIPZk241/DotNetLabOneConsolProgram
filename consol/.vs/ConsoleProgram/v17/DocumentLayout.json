@@ -1,0 +1,54 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\dotnetlab1-main\\consol\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{9446B8D4-4611-440A-8D52-8D7236021438}|ConsoleProgram\\ConsoleProgram.csproj|d:\\dotnetlab1-main\\consol\\consoleprogram\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9446B8D4-4611-440A-8D52-8D7236021438}|ConsoleProgram\\ConsoleProgram.csproj|solutionrelative:consoleprogram\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9446B8D4-4611-440A-8D52-8D7236021438}|ConsoleProgram\\ConsoleProgram.csproj|d:\\dotnetlab1-main\\consol\\consoleprogram\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9446B8D4-4611-440A-8D52-8D7236021438}|ConsoleProgram\\ConsoleProgram.csproj|solutionrelative:consoleprogram\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Class1.cs",
+              "DocumentMoniker": "D:\\dotnetlab1-main\\consol\\ConsoleProgram\\Class1.cs",
+              "RelativeDocumentMoniker": "ConsoleProgram\\Class1.cs",
+              "ToolTip": "D:\\dotnetlab1-main\\consol\\ConsoleProgram\\Class1.cs*",
+              "RelativeToolTip": "ConsoleProgram\\Class1.cs*",
+              "ViewState": "AgIAALwBAAAAAAAAAAAewOEBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-27T12:44:51.711Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\dotnetlab1-main\\consol\\ConsoleProgram\\Program.cs",
+              "RelativeDocumentMoniker": "ConsoleProgram\\Program.cs",
+              "ToolTip": "D:\\dotnetlab1-main\\consol\\ConsoleProgram\\Program.cs",
+              "RelativeToolTip": "ConsoleProgram\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHMAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-16T13:06:34.55Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

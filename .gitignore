@@ -1,5 +1,6 @@
 # 🔹 Visual Studio 
 .vscode/
+.vs/  # Додаємо папку .vs
 *.code-workspace
 *.suo
 *.user
@@ -27,7 +28,7 @@ secrets.json
 *.sqlite
 *.db
 
-# NuGet pacage
+# NuGet package
 *.nupkg
 packages/
 .nuget/
@@ -39,5 +40,5 @@ Desktop.ini
 $RECYCLE.BIN/
 .DS_Store
 
-#  IDE file
+# IDE file
 .idea/
