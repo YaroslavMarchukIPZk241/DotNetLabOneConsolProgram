@@ -401,41 +401,36 @@ namespace BankLibrary
             this.connectionManager = connectionManager;
         }
 
-        public string[] MenuBank()
+        public (string CardNumber, string PinCode) MenuBank()
         {
             DisplayMessage("Вітаю вас у консольному додатку ПТермінал\nВиберіть банк, з яким ви хочете працювати:");
             List<BankParameter> banks = GetBanksFromDatabase();
 
             while (true)
             {
-                        
                 for (int i = 0; i < banks.Count; i++)
                 {
                     DisplayMessage($"{i + 1} - {banks[i].Name}");
                 }
 
-                string choix= GetInput(); 
-              
+                string choix = GetInput();
                 int bankIndex;
 
-                   if (int.TryParse(choix, out bankIndex) && bankIndex > 0 && bankIndex <= banks.Count)
+                if (int.TryParse(choix, out bankIndex) && bankIndex > 0 && bankIndex <= banks.Count)
                 {
                     var selectedBank = banks[bankIndex - 1];
-                    DisplayMessage(($"Введіть номер картки для {selectedBank.Name}: "));                 
-                    string cardNumber = "";
-                    cardNumber = GetInput();
-                    DisplayMessage("Введіть пін-код: ");                
-                    string pinCodeInput = GetInput();  
-                    int pinCode;
-                    if (int.TryParse(pinCodeInput, out pinCode))
+                    DisplayMessage($"Введіть номер картки для {selectedBank.Name}: ");
+                    string cardNumber = GetInput();
+                    DisplayMessage("Введіть пін-код: ");
+                    string pinCodeInput = GetInput();
+
+                    if (int.TryParse(pinCodeInput, out int pinCode))
                     {
-                 
                         GetAccount getAccount = new GetAccount(connectionManager);
-                       if(getAccount.Authenticate(cardNumber, pinCodeInput, selectedBank.Id.ToString()))
+                        if (getAccount.Authenticate(cardNumber, pinCodeInput, selectedBank.Id.ToString()))
                         {
-                            string[] mas = { cardNumber, pinCodeInput };
-                            return mas;
-                        }                      
+                            return (cardNumber, pinCodeInput);
+                        }
                     }
                     else
                     {

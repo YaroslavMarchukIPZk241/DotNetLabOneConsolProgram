@@ -24,41 +24,32 @@ public class ConsoleInput : IInput
 }
 public class Program
 {
-   
-    delegate string[] Dmenu();//зберігає два значення , перше це номер карти а друге пінкод 
-    delegate double WorkInBankOperation(string cardName, string cardCod, double  moneyBank);//делегат для працювання з терміналом
-    delegate double OperationinUser(string cardName); //делегат для працювання з карткою юзера (подивитись баланс або перекинути гроші на іншу картку)
-    
+    delegate (string CardNumber, string PinCode) SaveCardNumberAndCardPinCode();
+    delegate double WorkInBankOperation(string cardName, string cardCod, double moneyBank);
+    delegate double OperationInUser(string cardName);
+
     static void Main()
     {
         Console.OutputEncoding = System.Text.Encoding.UTF8;
-        double BankBalance = 1000; // це баланс банкомата
-        ConnectionManager connectionManager = new ConnectionManager("Server=RIPLOVIK\\RIPLOVIK;Database=BankDatabase;Trusted_Connection=True;");;
+        double BankBalance = 1000;
+        ConnectionManager connectionManager = new ConnectionManager("Server=RIPLOVIK\\RIPLOVIK;Database=BankDatabase;Trusted_Connection=True;");
         Bank menu = new Bank(connectionManager);
-        Dmenu MenuChuseBank = menu.MenuBank;
-        string[] cardDetails = MenuChuseBank();
-        string cardName = cardDetails[0];
-        string cardCod = cardDetails[1];
-        MenuChoisInBabkOperation(cardName, cardCod, connectionManager,BankBalance);
-       
-        
+        SaveCardNumberAndCardPinCode MenuChooseBank = menu.MenuBank;
+        var (cardNumber, pinCode) = MenuChooseBank();
+        MenuChoisInBabkOperation(cardNumber, pinCode, connectionManager, BankBalance);
     }
     static void MenuChoisInBabkOperation(string cardName,string cardCod, ConnectionManager connectionManager, double BankBalance)
     {
         Account userOperation = new Account(connectionManager);
-        AutomatedTellerMachine ATM = new AutomatedTellerMachine(connectionManager); // делегат для працювання з терміналом
-
-
+        AutomatedTellerMachine ATM = new AutomatedTellerMachine(connectionManager); 
         WorkInBankOperation withdrawalOperation = ATM.withdrawalOfFundsInBank;
         WorkInBankOperation addMoneyOperation = ATM.AddMoneyInYorCard;
- 
-
         while (true)
         {
             Console.WriteLine("Аутентифікація успішна. оберіть нступні дії \n 1-переглянути баланс\n 2-зняття коштів \n 3-зарахування коштів на картку \n 4- перерахування коштів на картку із заданим номером.\n 5 - вихід");
             string input = Console.ReadLine();
             int choix;
-            OperationinUser userBalance;
+            OperationInUser userBalance;
             userBalance = userOperation.ChekBalans;
 
             if (int.TryParse(input, out choix))
