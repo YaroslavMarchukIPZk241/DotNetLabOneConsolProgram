@@ -42,7 +42,7 @@ public class Program
     {
         Account userOperation = new Account(connectionManager);
         AutomatedTellerMachine ATM = new AutomatedTellerMachine(connectionManager); 
-        WorkInBankOperation withdrawalOperation = ATM.withdrawalOfFundsInBank;
+        WorkInBankOperation withdrawalOperation = ATM.WithdrawalOfFundsInBank;
         WorkInBankOperation addMoneyOperation = ATM.AddMoneyInYorCard;
         while (true)
         {
