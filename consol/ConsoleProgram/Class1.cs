@@ -78,99 +78,112 @@ namespace BankLibrary
 
         public double TransferringFundsToAnotherCard(string cardNumber, string cardAnotherCard, string pinCode)
         {
-          
-           
             while (true)
             {
-                DisplayMessage("Введіть суму, яку ви хочете переслати (введіть 0, якщо ви хочете вийти):");
-                string input = GetInput(); 
-               
-                if (input == "0")
+                double amountToTransfer = GetAmountToTransfer();
+                if (amountToTransfer == 0) break;
+                if (amountToTransfer > 0)
                 {
-                    break;
-                }
-
-                if (double.TryParse(input, out double prise) && prise > 0)
-                {
-                    double currentBalance = ChekBalans(cardNumber);
-
-                    if (currentBalance >= prise)
+                    double currentBalance = CheckBalance(cardNumber);
+                    if (currentBalance >= amountToTransfer)
                     {
-                        string bankId = "";
-
-                       
-                        using (SqlConnection connection = new SqlConnection(connectionManager.GetConnectionString()))
+                        string bankId = GetBankId(cardNumber);
+                        if (!string.IsNullOrEmpty(bankId))
                         {
-                            string bankQuery = "SELECT BankId FROM Accounts WHERE CardNumber = @cardNumber";
-
-                            using (SqlCommand bankCommand = new SqlCommand(bankQuery, connection))
-                            {
-                                bankCommand.Parameters.AddWithValue("@cardNumber", cardNumber);
-                                connection.Open();
-                                object result = bankCommand.ExecuteScalar();
-
-                                if (result != null)
-                                {
-                                    bankId = result.ToString();
-                                }
-                            }
-                        }
-
-                        if (!string.IsNullOrEmpty(bankId)) 
-                        {
-                            using (SqlConnection connection = new SqlConnection(connectionManager.GetConnectionString()))
-                            {
-                                string query = @"
-                        BEGIN TRANSACTION;
-                        UPDATE Accounts
-                        SET Balance = Balance - @transferAmount
-                        WHERE CardNumber = @cardNumber;                      
-                        UPDATE Accounts
-                        SET Balance = Balance + @transferAmount
-                        WHERE CardNumber = @cardAnotherCard;
-
-                        COMMIT TRANSACTION;";
-
-                                using (SqlCommand command = new SqlCommand(query, connection))
-                                {
-                                    command.Parameters.AddWithValue("@cardNumber", cardNumber);
-                                    command.Parameters.AddWithValue("@cardAnotherCard", cardAnotherCard);
-                                    command.Parameters.AddWithValue("@transferAmount", prise);
-
-                                    GetAccount getAccount = new GetAccount(connectionManager);
-                                    if (getAccount.Authenticate(cardNumber, pinCode, bankId)) 
-                                    {
-                                        connection.Open();
-                                        command.ExecuteNonQuery();
-                                        DisplayMessage("Переказ успішно завершено.");
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        DisplayMessage("Неправильний пін-код або банк не існує.");
-                                        break;
-                                    }
-                                }
-                            }
+                            PerformTransaction(cardNumber, cardAnotherCard, amountToTransfer, bankId, pinCode);
                         }
                         else
                         {
-                            DisplayMessage("Банк не знайдено для зазначеного номера картки.");
-                            break;
+                            DisplayMessage("Bank not found for the provided card number.");
                         }
                     }
                     else
                     {
-                        DisplayMessage("Недостатньо коштів на рахунку.");
+                        DisplayMessage("Insufficient funds in the account.");
                     }
                 }
                 else
                 {
-                    DisplayMessage("Будь ласка, введіть дійсну суму.");
+                    DisplayMessage("Please enter a valid amount.");
                 }
             }
 
             return 0;
+        }
+        private double GetAmountToTransfer()
+        {
+            DisplayMessage("Enter the amount you want to transfer (enter 0 to exit):");
+            string input = GetInput();
+            return double.TryParse(input, out double amount) ? amount : 0;
+        }
+        private double CheckBalance(string cardNumber)
+        {
+            
+            double balance = 0;
+            using (SqlConnection connection = new SqlConnection(connectionManager.GetConnectionString()))
+            {
+                string query = "SELECT Balance FROM Accounts WHERE CardNumber = @cardNumber";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@cardNumber", cardNumber);
+                    connection.Open();
+                    object result = command.ExecuteScalar();
+                    if (result != null)
+                    {
+                        balance = Convert.ToDouble(result);
+                    }
+                }
+            }
+            return balance;
+        }
+        private string GetBankId(string cardNumber)
+        {
+            string bankId = "";
+            using (SqlConnection connection = new SqlConnection(connectionManager.GetConnectionString()))
+            {
+                string bankQuery = "SELECT BankId FROM Accounts WHERE CardNumber = @cardNumber";
+                using (SqlCommand bankCommand = new SqlCommand(bankQuery, connection))
+                {
+                    bankCommand.Parameters.AddWithValue("@cardNumber", cardNumber);
+                    connection.Open();
+                    object result = bankCommand.ExecuteScalar();
+                    if (result != null)
+                    {
+                        bankId = result.ToString();
+                    }
+                }
+            }
+            return bankId;
+        }
+        private void PerformTransaction(string cardNumber, string cardAnotherCard, double amount, string bankId, string pinCode)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionManager.GetConnectionString()))
+            {
+                string query = @"
+        BEGIN TRANSACTION;
+        UPDATE Accounts SET Balance = Balance - @transferAmount WHERE CardNumber = @cardNumber;
+        UPDATE Accounts SET Balance = Balance + @transferAmount WHERE CardNumber = @cardAnotherCard;
+        COMMIT TRANSACTION;";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@cardNumber", cardNumber);
+                    command.Parameters.AddWithValue("@cardAnotherCard", cardAnotherCard);
+                    command.Parameters.AddWithValue("@transferAmount", amount);
+
+                    GetAccount getAccount = new GetAccount(connectionManager);
+                    if (getAccount.Authenticate(cardNumber, pinCode, bankId))
+                    {
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        DisplayMessage("Transfer successfully completed.");
+                    }
+                    else
+                    {
+                        DisplayMessage("Invalid PIN or the bank does not exist.");
+                    }
+                }
+            }
         }
     }
 
